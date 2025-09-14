@@ -17,7 +17,7 @@ const AnimatedStickyNote = ({
   imageUrl: string
 }) => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
+  const isInView = useInView(ref, { once: true, amount: 0.5 })
 
   return (
     <motion.div
@@ -25,16 +25,21 @@ const AnimatedStickyNote = ({
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 100 }}
       transition={{ duration: 0.8 }}
-      className="flex flex-col md:flex-row items-center justify-center md:space-x-12"
+      className="flex flex-col md:flex-row items-center justify-center md:space-x-12 w-full px-4 md:px-8 max-w-6xl mx-auto mb-16 md:mb-24"
     >
-      <div className="w-100">
+      <div className="w-full md:w-1/2 flex justify-center">
         <StickyNote>{children}</StickyNote>
       </div>
-      <img
-        src={imageUrl}
-        alt="There should be an image here :("
-        className="w-100 rounded-lg shadow-lg mt-8 md:mt-0"
-      />
+      <div className="w-full md:w-1/2 flex justify-center mt-8 md:mt-0">
+        <img
+          src={imageUrl}
+          alt="There should be an image here :("
+          className="w-full max-w-[90vw] md:max-w-[400px] h-auto rounded-lg shadow-lg object-cover"
+          style={{
+            aspectRatio: '1/1'
+          }}
+        />
+      </div>
     </motion.div>
   )
 }
@@ -45,7 +50,7 @@ const GoOutMessage = ({
   children: React.ReactNode
 }) => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.8 })
+  const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
     <motion.div
@@ -102,6 +107,17 @@ const getButtonMessage = (
 }
 
 function App() {
+  // Add viewport height adjustment for mobile browsers
+  useEffect(() => {
+    const adjustHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    adjustHeight();
+    window.addEventListener('resize', adjustHeight);
+    return () => window.removeEventListener('resize', adjustHeight);
+  }, []);
   const [clickCount, setClickCount] = useState(0)
   const [lastClicked, setLastClicked] = useState<'yes' | 'no' | null>(null)
   const [message, setMessage] = useState('')
@@ -144,8 +160,8 @@ function App() {
   }
 
   return (
-    <div className="bg-black text-pink-500 min-h-screen font-sans p-4">
-      <div className="flex flex-col items-center justify-center h-screen">
+    <div className="bg-black text-pink-500 min-h-screen font-sans px-4 pb-4 overflow-x-hidden">
+      <div className="flex flex-col items-center justify-center min-h-[calc(var(--vh,1vh)*100)]">
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -169,19 +185,19 @@ function App() {
 
       <div className="py-24 flex items-center justify-center">
         <AnimatedStickyNote imageUrl={smart}>
-          <p className="text-3xl">...and I am smart and can help you study...<br /><br />🤓🤓</p>
+          <p className="text-3xl">...I am smart and can help you study...<br /><br />🤓🤓</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="py-24 flex items-center justify-center">
         <AnimatedStickyNote imageUrl={food}>
-          <p className="text-3xl">...and I can cook delicious meals and buy you your favorite foods...<br /><br />😋😋</p>
+          <p className="text-3xl">...I can cook delicious meals and buy you your favorite foods...<br /><br />😋😋</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="py-24 flex items-center justify-center">
         <AnimatedStickyNote imageUrl={trumpet}>
-          <p className="text-3xl">...and I can play all your favorite songs on trumpet and piano...<br /><br />🎺🎹</p>
+          <p className="text-3xl">...I can play all your favorite songs on trumpet and piano...<br /><br />🎺🎹</p>
         </AnimatedStickyNote>
       </div>
 
@@ -197,19 +213,19 @@ function App() {
       <GoOutMessage>
       <div className="flex flex-col items-center justify-center h-screen font-bold">
         <h2 className="text-4xl md:text-5xl mb-12 text-center">...will you go out with me?</h2>
-        {message && <p className="text-2xl md:text-3xl mb-8 h-10 text-center">{message}</p>}
-        <div className="flex space-x-8">
+        {message && <p className="text-2xl md:text-3xl mb-8 text-center">{message}</p>}
+        <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8 w-full max-w-xs sm:max-w-md mx-auto">
           <button
             onClick={() => handleButtonClick('yes')}
-            className="bg-pink-500 hover:bg-pink-700 hover:cursor-pointer text-black px-8 py-4 rounded-lg text-2xl"
+            className="bg-pink-500 hover:bg-pink-700 hover:cursor-pointer text-black px-6 sm:px-8 py-4 rounded-lg text-xl sm:text-2xl shadow-lg transition-all"
           >
-            Yes
+            Yes!
           </button>
           <button
             onClick={() => handleButtonClick('no')}
-            className="bg-purple-500 hover:bg-purple-700 hover:cursor-pointer text-black px-8 py-4 rounded-lg text-2xl"
+            className="bg-purple-500 hover:bg-purple-700 hover:cursor-pointer text-black px-6 sm:px-8 py-4 rounded-lg text-xl sm:text-2xl shadow-lg transition-all"
           >
-            No
+            No!
           </button>
         </div>
       </div>
