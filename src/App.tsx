@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { motion, useInView } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import StickyNote from './StickyNote'
 import MouseIcon from './MouseIcon'
 
@@ -20,13 +20,15 @@ const AnimatedStickyNote = ({
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 100 }}
       transition={{ duration: 0.8 }}
-      className="flex flex-col md:flex-row items-center justify-center md:space-x-8"
+      className="flex flex-col md:flex-row items-center justify-center md:space-x-12"
     >
-      <StickyNote>{children}</StickyNote>
+      <div className="w-80">
+        <StickyNote>{children}</StickyNote>
+      </div>
       <img
         src={imageUrl}
         alt="placeholder"
-        className="w-64 h-64 rounded-lg shadow-lg mt-8 md:mt-0"
+        className="w-80 h-80 rounded-lg shadow-lg mt-8 md:mt-0"
       />
     </motion.div>
   )
@@ -68,10 +70,21 @@ function App() {
   const [clickCount, setClickCount] = useState(0)
   const [lastClicked, setLastClicked] = useState<'yes' | 'no' | null>(null)
   const [message, setMessage] = useState('')
+  const [showMouseIcon, setShowMouseIcon] = useState(true)
   const navigate = useNavigate()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo(0, 0)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setShowMouseIcon(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const handleButtonClick = (buttonType: 'yes' | 'no') => {
@@ -97,56 +110,60 @@ function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
-          className="text-4xl md:text-6xl font-bold text-center"
+          className="text-5xl md:text-7xl font-bold text-center"
         >
           I have a question for you...
         </motion.h1>
-        <motion.div
-          animate={{
-            y: [0, 20, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            repeatType: 'loop',
-          }}
-          className="absolute bottom-10"
-        >
-          <MouseIcon />
-        </motion.div>
+        <AnimatePresence>
+          {showMouseIcon && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, 20, 0] }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                repeatType: 'loop',
+              }}
+              className="absolute bottom-10"
+            >
+              <MouseIcon />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div className="py-16 md:py-32 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="https://picsum.photos/seed/picsum/200/300">
-          <p className="text-xl md:text-3xl">This is a sticky note.</p>
+      <div className="py-24 flex items-center justify-center">
+        <AnimatedStickyNote imageUrl="https://picsum.photos/seed/1/400/400">
+          <p className="text-2xl">This is a sticky note.</p>
         </AnimatedStickyNote>
       </div>
 
-      <div className="py-16 md:py-32 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="https://picsum.photos/seed/picsum/200/300">
-          <p className="text-xl md:text-3xl">This is another sticky note.</p>
+      <div className="py-24 flex items-center justify-center">
+        <AnimatedStickyNote imageUrl="https://picsum.photos/seed/2/400/400">
+          <p className="text-2xl">This is another sticky note.</p>
         </AnimatedStickyNote>
       </div>
 
-      <div className="py-16 md:py-32 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="https://picsum.photos/seed/picsum/200/300">
-          <p className="text-xl md:text-3xl">And one more!</p>
+      <div className="py-24 flex items-center justify-center">
+        <AnimatedStickyNote imageUrl="https://picsum.photos/seed/3/400/400">
+          <p className="text-2xl">And one more!</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="flex flex-col items-center justify-center h-screen">
-        <h2 className="text-3xl md:text-4xl mb-4 text-center">The final question...</h2>
-        {message && <p className="text-xl md:text-2xl mb-4 h-8 text-center">{message}</p>}
-        <div className="flex space-x-4">
+        <h2 className="text-4xl md:text-5xl mb-8 text-center">The final question...</h2>
+        {message && <p className="text-2xl md:text-3xl mb-8 h-10 text-center">{message}</p>}
+        <div className="flex space-x-8">
           <button
             onClick={() => handleButtonClick('yes')}
-            className="bg-pink-500 text-black px-6 py-3 md:px-8 md:py-4 rounded-lg text-xl md:text-2xl font-bold"
+            className="bg-pink-500 text-black px-8 py-4 rounded-lg text-2xl font-bold"
           >
             Yes
           </button>
           <button
             onClick={() => handleButtonClick('no')}
-            className="bg-purple-500 text-black px-6 py-3 md:px-8 md:py-4 rounded-lg text-xl md:text-2xl font-bold"
+            className="bg-purple-500 text-black px-8 py-4 rounded-lg text-2xl font-bold"
           >
             No
           </button>
