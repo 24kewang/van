@@ -3,6 +3,11 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import StickyNote from './StickyNote'
 import MouseIcon from './MouseIcon'
+import food from './assets/food.jpg'
+import me from './assets/me.jpg'
+import me_nice from './assets/me_nice.jpg'
+import smart from './assets/smart.jpg'
+import trumpet from './assets/trumpet.jpg'
 
 const AnimatedStickyNote = ({
   children,
@@ -27,7 +32,7 @@ const AnimatedStickyNote = ({
       </div>
       <img
         src={imageUrl}
-        alt="placeholder"
+        alt="There should be an image here :("
         className="w-100 rounded-lg shadow-lg mt-8 md:mt-0"
       />
     </motion.div>
@@ -157,31 +162,31 @@ function App() {
       </div>
 
       <div className="py-24 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="/me_nice.jpg">
+        <AnimatedStickyNote imageUrl={me_nice}>
           <p className="text-3xl">I am such a nice person...<br /><br />😀😀</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="py-24 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="/smart.jpg">
+        <AnimatedStickyNote imageUrl={smart}>
           <p className="text-3xl">...and I am smart and can help you study...<br /><br />🤓🤓</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="py-24 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="/food.jpg">
+        <AnimatedStickyNote imageUrl={food}>
           <p className="text-3xl">...and I can cook delicious meals and buy you your favorite foods...<br /><br />😋😋</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="py-24 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="/trumpet.jpg">
+        <AnimatedStickyNote imageUrl={trumpet}>
           <p className="text-3xl">...and I can play all your favorite songs on trumpet and piano...<br /><br />🎺🎹</p>
         </AnimatedStickyNote>
       </div>
 
       <div className="py-24 flex items-center justify-center">
-        <AnimatedStickyNote imageUrl="/me.jpg">
+        <AnimatedStickyNote imageUrl={me}>
           <p className="text-3xl">...not to mention, I am so handsome and good-looking...<br /><br />😎😎</p>
         </AnimatedStickyNote>
       </div>

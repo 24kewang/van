@@ -19,7 +19,9 @@ const router = createBrowserRouter([
     path: '/no',
     element: <NoPage />,
   },
-])
+],
+{ basename: '/van' }
+)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
