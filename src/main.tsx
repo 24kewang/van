@@ -1,12 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import YesPage from './YesPage.tsx'
 import NoPage from './NoPage.tsx'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <App />,
@@ -19,9 +19,7 @@ const router = createBrowserRouter([
     path: '/no',
     element: <NoPage />,
   },
-],
-{ basename: '/van' }
-)
+])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
